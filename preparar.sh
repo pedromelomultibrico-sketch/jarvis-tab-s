@@ -4,9 +4,11 @@ set -e
 REPO=https://raw.githubusercontent.com/pedromelomultibrico-sketch/jarvis-tab-s/main
 TWRP=twrp-3.7.0_9-0-klimtlte.img
 mkdir -p ~/tab && cd ~/tab
-echo ">> 1/4 Pacotes"
-yes | pkg update -y
-pkg install -y git clang cmake make libusb termux-api curl python
+echo ">> 1/4 Pacotes (atualizar tudo)"
+export DEBIAN_FRONTEND=noninteractive
+apt-get update -y
+apt-get -y -o Dpkg::Options::=--force-confnew full-upgrade
+apt-get -y -o Dpkg::Options::=--force-confnew install git clang cmake make libusb termux-api curl python openssl
 echo ">> 2/4 Heimdall (com ligação USB do Termux)"
 rm -rf heimdall-src && git clone --depth 1 https://github.com/Benjamin-Dobell/Heimdall heimdall-src
 curl -fsSL "$REPO/patch_heimdall.py" -o patch_heimdall.py
