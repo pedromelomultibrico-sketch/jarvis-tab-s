@@ -7,14 +7,14 @@ mkdir -p ~/tab && cd ~/tab
 echo ">> 1/4 Pacotes (atualizar tudo)"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get -y -o Dpkg::Options::=--force-confnew full-upgrade
-apt-get -y -o Dpkg::Options::=--force-confnew install git clang cmake make libusb termux-api curl python openssl
+apt-get -y -o Dpkg::Options::=--force-confold full-upgrade
+apt-get -y -o Dpkg::Options::=--force-confold install git clang cmake make libusb termux-api curl python openssl
 echo ">> 2/4 Heimdall (com ligação USB do Termux)"
 rm -rf heimdall-src && git clone --depth 1 https://github.com/Benjamin-Dobell/Heimdall heimdall-src
 curl -fsSL "$REPO/patch_heimdall.py" -o patch_heimdall.py
 python patch_heimdall.py heimdall-src
 mkdir -p heimdall-src/build && cd heimdall-src/build
-cmake -DDISABLE_FRONTEND=ON -DCMAKE_BUILD_TYPE=Release \
+cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DDISABLE_FRONTEND=ON -DCMAKE_BUILD_TYPE=Release \
   -DLIBUSB_INCLUDE_DIR=$PREFIX/include/libusb-1.0 -DLIBUSB_LIBRARY=$PREFIX/lib/libusb-1.0.so ..
 make -j4 heimdall
 cp bin/heimdall $PREFIX/bin/heimdall && cd ~/tab
